@@ -59,15 +59,15 @@ workflows:
   build-deploy:
     jobs:
       - dependencies:
-        filters:
-          branches:
-            only:
-              - master
-              - /feature/.*/
-              - /release/.*/
-              - /hotfix/.*/
-          tags:
-            only: /^v.+/
+          filters:
+            branches:
+              only:
+                - master
+                - /feature/.*/
+                - /release/.*/
+                - /hotfix/.*/
+            tags:
+              only: /^v.+/
       - test:
           requires:
             - dependencies
