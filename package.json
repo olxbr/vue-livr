@@ -5,6 +5,9 @@
   "author": "Jonatas Gusmão <js.gusmao@hotmail.com>",
   "license": "MIT",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "Vue",
     "VueJS",
