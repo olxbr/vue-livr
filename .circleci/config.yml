@@ -1,0 +1,99 @@
+version: 2
+jobs:
+  dependencies:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10.15-browsers
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - restore_cache:
+          key: dependencies-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - save_cache:
+          key: dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths: .
+  test:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10.15-browsers
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Test
+          command: npm test
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10.15-browsers
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Prod Build
+          command: npm run build
+  publish:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10.15-browsers
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+        name: bump package version
+        command: |
+          npm version --no-git-tag-version -f from-git -m "Bumped version number to %s [ci skip]"
+          git push origin master
+          npm publish
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - dependencies:
+        filters:
+          branches:
+            only:
+              - master
+              - /feature/.*/
+              - /release/.*/
+              - /hotfix/.*/
+          tags:
+            only: /^v.+/
+      - test:
+          requires:
+            - dependencies
+          filters:
+            branches:
+              only:
+                - master
+                - /feature/.*/
+                - /release/.*/
+                - /hotfix/.*/
+            tags:
+              only: /^v.+/
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              ignore: /.*/
+      - publish:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.+/
