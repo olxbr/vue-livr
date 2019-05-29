@@ -49,7 +49,7 @@ jobs:
           command: |
             npm version --no-git-tag-version -f from-git -m "Bumped version number to %s [ci skip]"
             git push origin master
-            npm publish
+            npm publish --beta
 
 workflows:
   version: 2
@@ -83,6 +83,6 @@ workflows:
           filters:
             branches:
               only:
-                - /feature/build-config
+                - feature/build-config
             tags:
               only: /^v.+/
