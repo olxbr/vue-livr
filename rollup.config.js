@@ -7,6 +7,7 @@ export default [
     input: 'src/index.js',
     plugins: [terser()],
     output: {
+      dir: 'dist',
       format: 'iife',
       name: 'VueLivr',
     },
