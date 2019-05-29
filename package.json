@@ -24,7 +24,7 @@
     "prepare": "rollup --config",
     "lint": "eslint src -c .eslintrc.js --ext .js",
     "lintfix": "eslint src -c .eslintrc.js --fix --ext .js",
-    "test": "NODE_ENV=test jest --config test/unit/jest.conf.js"
+    "test": "jest --config test/unit/jest.conf.js"
   },
   "dependencies": {
     "livr": "^2.2.5",
