@@ -1,5 +1,5 @@
 import LIVR from 'livr';
-import { patchRule } from './rules/util';
+import { patchRule } from '../utils';
 import LivrError from './error';
 
 const patchRules = () => {
