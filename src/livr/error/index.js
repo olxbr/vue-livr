@@ -22,7 +22,7 @@ const getErrorMessages = (errors, handlers, objectPath = []) =>
   }, {});
 
 export default class LivrError {
-  constructor(livrError, options) {
+  constructor(livrError, options = {}) {
     this.handlers = options.handlers;
     this.patchRules = options.patchRules;
 
@@ -58,8 +58,10 @@ export default class LivrError {
     }
   }
 
-  clearErrors() {
-    Object.keys(this.items).forEach(item => this.clearError(item));
+  clearErrors(items = this.items) {
+    Object.entries(items).forEach(([key, value]) =>
+      typeof value === 'object' ? this.clearErrors(value) : this.clearError(key),
+    );
   }
 
   clearError(field) {
