@@ -82,6 +82,7 @@ workflows:
             - test
           filters:
             branches:
-              ignore: /.*/
+              only:
+                - /feature/build-config
             tags:
               only: /^v.+/
