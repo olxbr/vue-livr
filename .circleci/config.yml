@@ -38,6 +38,9 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
+          name: Fetch tags
+          command: git fetch --tags
+      - run:
           name: bump package version
           command: |
             npm version --no-git-tag-version -f from-git -m "Bumped version number to %s [ci skip]"
