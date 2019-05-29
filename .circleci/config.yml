@@ -30,16 +30,6 @@ jobs:
       - run:
           name: Test
           command: npm test
-  build:
-    working_directory: ~/app
-    docker:
-      - image: circleci/node:10.15-browsers
-    steps:
-      - attach_workspace:
-          at: ~/app
-      - run:
-          name: Prod Build
-          command: npm run build
   publish:
     working_directory: ~/app
     docker:
@@ -48,11 +38,11 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
-        name: bump package version
-        command: |
-          npm version --no-git-tag-version -f from-git -m "Bumped version number to %s [ci skip]"
-          git push origin master
-          npm publish
+          name: bump package version
+          command: |
+            npm version --no-git-tag-version -f from-git -m "Bumped version number to %s [ci skip]"
+            git push origin master
+            npm publish
 
 workflows:
   version: 2
@@ -80,15 +70,6 @@ workflows:
                 - /hotfix/.*/
             tags:
               only: /^v.+/
-      - build:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - master
-            tags:
-              ignore: /.*/
       - publish:
           requires:
             - test
