@@ -11,9 +11,6 @@ jobs:
       - restore_cache:
           key: dependencies-{{ checksum "package-lock.json" }}
       - run:
-          name: Log in to npm
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run:
           name: Install Dependencies
           command: npm ci
       - save_cache:
@@ -46,6 +43,9 @@ jobs:
           command: |
             git config --global user.email circleci@circleci
             git config --global user.name CircleCI
+      - run:
+          name: Log in to npm
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run:
           name: bump package version
           command: |
