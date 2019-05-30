@@ -42,12 +42,14 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
-          name: Fetch tags
-          command: git fetch --tags
+          name: config git
+          command: |
+            git config --global user.email circleci@circleci
+            git config --global user.name CircleCI
       - run:
           name: bump package version
           command: |
-            npm version $CIRCLE_TAG -m "Bumped version number to %s [ci skip]"
+            npm version $CIRCLE_TAG --no-git-tag-version -f -m "Bumped version number to %s [ci skip]"
             git push origin master
             npm publish
 
