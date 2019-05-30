@@ -4,23 +4,15 @@ import commonjs from 'rollup-plugin-commonjs';
 
 export default [
   {
-    input: 'src/index.js',
-    plugins: [terser()],
-    output: {
-      format: 'iife',
-      name: 'VueLivr',
-    },
-    plugins: [
-      terser(),
-      commonjs(),
-      resolve()
-    ],
-  },
-  {
     input: {
       index: 'src/index.js'
     },
     output: [
+      {
+        dir: 'dist',
+        format: 'iife',
+        name: 'VueLivr',
+      },
       {
         dir: 'dist/esm',
         format: 'esm',
