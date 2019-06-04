@@ -40,11 +40,11 @@ class LivrPlugin {
     Vue.mixin(mixin);
   }
 
-  initVM() {
+  initVM({ errorBagName, fieldsBagName }) {
     this._vm = new Vue({
       data: () => ({
-        errors: this.livrInstance.errors,
-        fields: this.livrInstance.fields,
+        [errorBagName]: this.livrInstance.errors,
+        [fieldsBagName]: this.livrInstance.fields,
       }),
     });
   }
