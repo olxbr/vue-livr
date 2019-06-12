@@ -17,13 +17,15 @@ const patchRules = () => {
 
 export default class Livr {
   constructor(pluginContainer, options) {
-    this.patchRules = options.patchRules;
+    this.extendedErrors = options.extendedErrors;
     this.aliasedRules = options.aliasedRules;
 
+    this.aliasedRules.forEach(this.registerAliasedDefaultRule);
     LIVR.Validator.registerDefaultRules(options.extraRules);
+
     this.errors = new LivrError(null, options);
 
-    if (this.patchRules) {
+    if (this.extendedErrors) {
       patchRules();
     }
 
@@ -52,8 +54,8 @@ export default class Livr {
     return result;
   }
 
-  registerAliasedDefaultRule() {
-    LIVR.Validator.registerAliasedDefaultRule(this.aliasedRules);
+  registerAliasedDefaultRule(aliasedRule) {
+    LIVR.Validator.registerAliasedDefaultRule(aliasedRule);
   }
 
   validateAll(validations, fields) {

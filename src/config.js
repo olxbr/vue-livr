@@ -4,9 +4,9 @@ const DEFAULT_CONFIG = {
   errorBagName: 'errors',
   fieldsBagName: 'fields',
   inject: true,
-  aliasedRules: {},
-  patchRules: false,
+  extendedErrors: false,
   extraRules: {},
+  aliasedRules: [],
 };
 
 // eslint-disable-next-line import/no-mutable-exports
