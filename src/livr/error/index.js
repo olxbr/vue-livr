@@ -23,8 +23,8 @@ const getErrorMessages = (errors, handlers, objectPath = []) =>
 
 export default class LivrError {
   constructor(livrError, options = {}) {
-    this.handlers = options.handlers;
-    this.patchRules = options.patchRules;
+    this.errorHandlers = options.errorHandlers;
+    this.extendedErrors = options.extendedErrors;
 
     this.allTouched = false;
     // make this bag a mirror of the provided one, sharing the same items reference.
@@ -46,7 +46,7 @@ export default class LivrError {
   }
 
   setError(result, field) {
-    const errors = getErrorMessages(result, this.handlers);
+    const errors = this.extendedErrors ? getErrorMessages(result, this.errorHandlers) : result;
     const currentErrors = field ? this.items : {};
     this.items = Object.assign({}, currentErrors, errors);
 
@@ -72,12 +72,16 @@ export default class LivrError {
     if (!this.hasError(field)) {
       return '';
     }
-    return get(this.items, `${field}.msg`, '');
+
+    const msgPath = this.extendedErrors ? '.msg' : '';
+
+    return get(this.items, `${field}${msgPath}`, '');
   }
 
   hasError(field) {
     const isTouched = this.allTouched || get(this.touchedFields, field, false);
-    const hasMsg = get(this.items, `${field}.msg`, '');
+    const msgPath = this.extendedErrors ? '.msg' : '';
+    const hasMsg = get(this.items, `${field}${msgPath}`, '');
     return isTouched && hasMsg !== '';
   }
 }

@@ -19,7 +19,7 @@ class LivrPlugin {
       Vue = _Vue;
     }
 
-    this.livrInstance = setValidator(new Livr(null, config));
+    this.livrInstance = setValidator(new Livr(null, this.config));
     this.initVM(this.config);
   }
 

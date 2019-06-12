@@ -15,8 +15,9 @@ import VueLIVR from 'vue-livr';
 
 Vue.use(VueLIVR, {
   extraRules: {}, // Extra rules to be added
-  patchRules: false, // Patch rules to return extended error codes
-  errorHandlers: {}, // Error handler to each error code that LIVR returns, it will run only if patchRules
+  extendedErrors: false, // Patch rules to return extended error codes
+  errorHandlers: {}, // Error handler to each error code that LIVR returns, it will run only if extendedErrors = true
+  aliasedRules: [], // aliasedRules to register
 });
 ```
 
@@ -43,7 +44,7 @@ export default {
   methods: {
     validate(field) {
       const { name } = this;
-      this.$livr.validate(schema, { name }, field);
+      this.$livr.validate(livrRules, { name }, field);
     },
   },
 };
