@@ -12,11 +12,7 @@ export const patchRule = (ruleName, ruleBuilder) => {
           [ruleName]: ruleArgs,
         };
 
-        if (Array.isArray(errorCode)) {
-          return errorCode[0];
-        }
-
-        if (isObject(errorCode)) {
+        if (Array.isArray(errorCode) || isObject(errorCode)) {
           return errorCode;
         }
 
