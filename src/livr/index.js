@@ -40,12 +40,12 @@ export default class Livr {
   }
 
   validate(validations, fields, field) {
-    this.validator = new LIVR.Validator(validations);
-    const valid = this.validator.validate(fields);
-    const result = valid || this.validator.getErrors();
+    const validator = new LIVR.Validator(validations);
+    const valid = validator.validate(fields);
+    const result = valid || validator.getErrors();
 
     if (!valid) {
-      this.errors.setError(result, field);
+      this.errors.setError(Object.assign({}, result), field);
       this.errors.setTouched(field);
       return { errors: this.errors.items };
     }

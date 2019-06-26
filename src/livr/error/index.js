@@ -2,17 +2,20 @@ import set from 'lodash/set';
 import get from 'lodash/get';
 import getMessage from './handler';
 
-const getErrorMessages = (errors, handlers, objectPath = []) =>
-  Object.entries(errors).reduce((agg, [field, error]) => {
+const getErrorMessages = (errors, handlers, objectPath = []) => {
+  const isArray = Array.isArray(errors);
+
+  return Object.entries(errors).reduce((agg, [field, error]) => {
     let path = [].concat(objectPath);
-    path.push(field);
-    if (error.code) {
+    if (!isArray) { path.push(field) };
+    
+    if (error && error.code) {
       const [[, ruleValue]] = Object.entries(error.rule);
       Object.assign(error, {
         msg: getMessage(handlers, path.join('.'), error.code, ruleValue),
       });
       path = [];
-    } else {
+    } else if (error) {
       getErrorMessages(error, handlers, path);
     }
 
@@ -20,6 +23,7 @@ const getErrorMessages = (errors, handlers, objectPath = []) =>
       [field]: error,
     });
   }, {});
+}
 
 export default class LivrError {
   constructor(livrError, options = {}) {
@@ -74,7 +78,6 @@ export default class LivrError {
     }
 
     const msgPath = this.extendedErrors ? '.msg' : '';
-
     return get(this.items, `${field}${msgPath}`, '');
   }
 
