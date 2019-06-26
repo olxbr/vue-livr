@@ -17,7 +17,7 @@ Vue.use(VueLIVR, {
   extraRules: {}, // Extra rules to be added
   extendedErrors: false, // Patch rules to return extended error codes
   errorHandlers: {}, // Error handler to each error code that LIVR returns, it will run only if extendedErrors = true
-  aliasedRules: [], // aliasedRules to register
+  aliasedRules: [], // list of aliasedRules to register
 });
 ```
 
@@ -46,6 +46,59 @@ export default {
       const { name } = this;
       this.$livr.validate(livrRules, { name }, field);
     },
+  },
+};
+```
+
+## Array example
+
+```html
+<div v-for="(form, index) in forms" :key="index"> 
+  <input 
+    class="listing-units__input" 
+    v-model="form.name"
+    @blur="validate('name', index)"
+    :class="{ invalid: hasErrorMessage('name', index) }"
+  />
+  <span>{{getErrorMessage('name', index)}}</span>
+</div>
+
+<button @click="validateAll">Validate All</button>
+```
+
+
+
+```js
+const livrRules = {
+  forms: ['required', {
+    list_of_objects: [{
+      name: ['required', { min_length: 1 }],
+    }],
+  }],
+};
+
+export default {
+  data() {
+    return {
+      forms: [{ name: '' }, { name: ''}],
+    };
+  },
+  methods: {
+    validate(field, index) {
+      const fieldName = `forms[${index}].${field}[0]`;
+      this.$livr.validate(livrRules, this.forms, fieldName);
+    },
+    validateAll() {
+      this.$livr.validateAll(livrRules, this.forms);
+    },
+    hasErrorMessage(field, index) {
+      const fieldName = `forms[${index}].${field}[0]`
+      return this.errors.hasError(fieldName);
+    },
+    getErrorMessage(field, index) {
+      const fieldName = `forms[${index}].${field}[0]`;
+      return this.errors.getError(fieldName);
+    }
   },
 };
 ```
