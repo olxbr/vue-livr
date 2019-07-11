@@ -7,8 +7,10 @@ const getErrorMessages = (errors, handlers, objectPath = []) => {
 
   return Object.entries(errors).reduce((agg, [field, error]) => {
     let path = [].concat(objectPath);
-    if (!isArray) { path.push(field) };
-    
+    if (!isArray) {
+      path.push(field);
+    }
+
     if (error && error.code) {
       const [[, ruleValue]] = Object.entries(error.rule);
       Object.assign(error, {
@@ -23,7 +25,7 @@ const getErrorMessages = (errors, handlers, objectPath = []) => {
       [field]: error,
     });
   }, {});
-}
+};
 
 export default class LivrError {
   constructor(livrError, options = {}) {
@@ -62,10 +64,10 @@ export default class LivrError {
     }
   }
 
-  clearErrors(items = this.items) {
-    Object.entries(items).forEach(([key, value]) =>
-      typeof value === 'object' ? this.clearErrors(value) : this.clearError(key),
-    );
+  clearErrors(errors = ({ items = {} } = this)) {
+    Object.entries(errors).forEach(([key, value]) => {
+      return typeof value === 'object' ? this.clearErrors(value) : this.clearError(key);
+    });
   }
 
   clearError(field) {
