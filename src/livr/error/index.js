@@ -64,7 +64,10 @@ export default class LivrError {
     }
   }
 
-  clearErrors(errors = ({ items = {} } = this)) {
+  clearErrors(errors = this.items) {
+    if (!errors) {
+      return;
+    }
     Object.entries(errors).forEach(([key, value]) => {
       return typeof value === 'object' ? this.clearErrors(value) : this.clearError(key);
     });

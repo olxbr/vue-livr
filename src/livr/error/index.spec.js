@@ -31,4 +31,10 @@ describe('Error - Index', () => {
     clearErrorsSpy.mockRestore();
     clearErrorSpy.mockRestore();
   });
+
+  it('should not thrown an error when called without arg', () => {
+    expect(() => error.clearErrors()).not.toThrow();
+    expect(() => error.clearErrors(null)).not.toThrow();
+    expect(() => error.clearErrors(undefined)).not.toThrow();
+  });
 });
