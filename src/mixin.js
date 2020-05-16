@@ -27,7 +27,6 @@ export default {
     return {};
   },
   beforeCreate() {
-    const errorBag = options.errorBagName || 'errors';
     // if built in do nothing.
     if (isBuiltInComponent(this.$vnode) || this.$options.$__livrInject === false) {
       return;
@@ -39,6 +38,7 @@ export default {
     }
 
     const options = resolveConfig(this);
+    const errorBag = options.errorBagName || 'errors';
 
     // if its a root instance, inject anyways, or if it requested a new instance.
     if (!this.$parent || (this.$options.$_livr && /new/.test(this.$options.$_livr.validator))) {
