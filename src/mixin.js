@@ -27,6 +27,7 @@ export default {
     return {};
   },
   beforeCreate() {
+    const errorBag = options.errorBagName || 'errors';
     // if built in do nothing.
     if (isBuiltInComponent(this.$vnode) || this.$options.$__livrInject === false) {
       return;
@@ -59,16 +60,17 @@ export default {
     // There is a livrInstance but it isn't injected, mark as reactive.
     if (!requested && this.$livr) {
       const Vue = this.$options._base; // the vue constructor.
-      Vue.util.defineReactive(this.$livr, 'errors', this.$livr.errors);
+      Vue.util.defineReactive(this.$livr, errorBag, this.$livr.errors);
     }
 
     if (!this.$options.computed) {
       this.$options.computed = {};
     }
 
-    this.$options.computed[options.errorBagName || 'errors'] = function errorBagGetter() {
+    this.$options.computed[errorBag] = function errorBagGetter() {
       return this.$livr.errors;
     };
+
     this.$options.computed[options.fieldsBagName || 'fields'] = function fieldBagGetter() {
       return this.$livr.fields.items.reduce((acc, field) => {
         if (field.scope) {
