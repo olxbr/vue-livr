@@ -58,9 +58,11 @@ describe('Error - Index', () => {
   });
 
   it('should return error message for a different index', () => {
-    error.setError({ field: [null, 'message'] }, 'field');
+    error.setError({ field: [undefined, 'message'] }, 'field');
     error.setTouched('field');
     expect(error.hasError('field', 0)).toBeFalsy();
     expect(error.hasError('field', 1)).toBeTruthy();
+    expect(error.getError('field', 0)).toBe('');
+    expect(error.getError('field', 1)).toBe('message');
   });
 });

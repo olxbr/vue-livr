@@ -89,7 +89,7 @@ export default class LivrError {
   }
 
   getMessage(error) {
-    return this.msgPath ? error[this.msgPath] : error;
+    return this.msgPath && error ? error[this.msgPath] : error;
   }
 
   getFirstError(field) {
