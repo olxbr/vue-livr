@@ -32,7 +32,7 @@ export default class LivrError {
   constructor(livrError, options = {}) {
     this.errorHandlers = options.errorHandlers;
     this.extendedErrors = options.extendedErrors;
-    this.msgPath = this.extendedErrors ? '.msg' : '';
+    this.msgPath = this.extendedErrors ? 'msg' : '';
 
     this.allTouched = false;
     // make this bag a mirror of the provided one, sharing the same items reference.
@@ -90,11 +90,6 @@ export default class LivrError {
 
   getMessage(error) {
     return this.msgPath && error ? error[this.msgPath] : error;
-  }
-
-  getFirstError(field) {
-    const errors = this.getErrors(field);
-    return errors.find(error => this.getMessage(error));
   }
 
   getErrors(field) {

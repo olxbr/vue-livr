@@ -66,3 +66,24 @@ describe('Error - Index', () => {
     expect(error.getError('field', 1)).toBe('message');
   });
 });
+
+describe('Error - Extended errors', () => {
+  const error = new LivrError(
+    {},
+    {
+      extendedErrors: true,
+      errorHandlers: {
+        ERROR(field) {
+          return `${field} error message`;
+        },
+      },
+    },
+  );
+
+  it('should return error message for a different index', () => {
+    error.setTouched('field');
+    error.setError({ field: { code: 'ERROR', rule: 'error' } }, 'field');
+    expect(error.hasError('field')).toBeTruthy();
+    expect(error.getError('field')).toBe('field error message');
+  });
+});
