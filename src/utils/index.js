@@ -40,4 +40,8 @@ export const isBuiltInComponent = vnode => {
   return /^(keep-alive|transition|transition-group)$/.test(tag);
 };
 
+export const isNoValue = value => value === null || typeof value === 'undefined' || value === '';
+
+export const isValue = value => !isNoValue(value);
+
 export default {};

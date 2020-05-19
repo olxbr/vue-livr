@@ -1,6 +1,7 @@
 import set from 'lodash/set';
 import get from 'lodash/get';
 import getMessage from './handler';
+import { isValue } from '../../utils';
 
 const getErrorMessages = (errors, handlers, objectPath = []) => {
   const isArray = Array.isArray(errors);
@@ -31,6 +32,7 @@ export default class LivrError {
   constructor(livrError, options = {}) {
     this.errorHandlers = options.errorHandlers;
     this.extendedErrors = options.extendedErrors;
+    this.msgPath = this.extendedErrors ? '.msg' : '';
 
     this.allTouched = false;
     // make this bag a mirror of the provided one, sharing the same items reference.
@@ -77,19 +79,32 @@ export default class LivrError {
     this.setError({}, field);
   }
 
-  getError(field) {
-    if (!this.hasError(field)) {
+  getError(field, idx = 0) {
+    if (!this.hasError(field, idx)) {
       return '';
     }
 
-    const msgPath = this.extendedErrors ? '.msg' : '';
-    return get(this.items, `${field}${msgPath}`, '');
+    const errors = this.getErrors(field);
+    return this.getMessage(errors[idx]);
   }
 
-  hasError(field) {
+  getMessage(error) {
+    return this.msgPath ? error[this.msgPath] : error;
+  }
+
+  getFirstError(field) {
+    const errors = this.getErrors(field);
+    return errors.find(error => this.getMessage(error));
+  }
+
+  getErrors(field) {
+    const errors = [].concat(get(this.items, field, []));
+    return errors;
+  }
+
+  hasError(field, idx = 0) {
     const isTouched = this.allTouched || get(this.touchedFields, field, false);
-    const msgPath = this.extendedErrors ? '.msg' : '';
-    const hasMsg = get(this.items, `${field}${msgPath}`, '');
-    return isTouched && hasMsg !== '';
+    const errors = this.getErrors(field);
+    return isTouched && isValue(this.getMessage(errors[idx]));
   }
 }

@@ -53,52 +53,47 @@ export default {
 ## Array example
 
 ```html
-<div v-for="(form, index) in forms" :key="index"> 
-  <input 
-    class="listing-units__input" 
-    v-model="form.name"
+<div v-for="(user, index) in users" :key="index">
+  <input
+    class="listing-units__input"
+    v-model="user.name"
     @blur="validate('name', index)"
-    :class="{ invalid: hasErrorMessage('name', index) }"
+    :class="{ invalid: errors.hasError('name', index) }"
   />
-  <span>{{getErrorMessage('name', index)}}</span>
+  <span>{{errors.getError('name', index)}}</span>
 </div>
 
 <button @click="validateAll">Validate All</button>
 ```
 
-
-
 ```js
 const livrRules = {
-  forms: ['required', {
-    list_of_objects: [{
-      name: ['required', { min_length: 1 }],
-    }],
-  }],
+  users: [
+    'required',
+    {
+      list_of_objects: [
+        {
+          name: ['required', { min_length: 1 }],
+        },
+      ],
+    },
+  ],
 };
 
 export default {
   data() {
     return {
-      forms: [{ name: '' }, { name: ''}],
+      users: [{ name: '' }, { name: '' }],
     };
   },
   methods: {
     validate(field, index) {
-      const fieldName = `forms[${index}].${field}[0]`;
-      this.$livr.validate(livrRules, this.forms, fieldName);
+      const fieldName = `users[${index}].${field}[0]`;
+      this.$livr.validate(livrRules, this.users, fieldName);
     },
     validateAll() {
-      this.$livr.validateAll(livrRules, this.forms);
+      this.$livr.validateAll(livrRules, this.users);
     },
-    hasErrorMessage(field, index) {
-      const fieldName = `forms[${index}].${field}[0]`
-      return this.errors.hasError(fieldName);
-    },
-    getErrorMessage(field, index) {
-      const fieldName = `forms[${index}].${field}[0]`;
-      return this.errors.getError(fieldName);
-    }
   },
 };
 ```

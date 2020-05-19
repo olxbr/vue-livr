@@ -37,4 +37,30 @@ describe('Error - Index', () => {
     expect(() => error.clearErrors(null)).not.toThrow();
     expect(() => error.clearErrors(undefined)).not.toThrow();
   });
+
+  it('should not return error message when field not touched', () => {
+    error.setError({ field: 'message' }, 'field');
+    expect(error.hasError('field')).toBeFalsy();
+  });
+
+  it('should return error message when allTouched is true and field is not touched', () => {
+    error.setError({ field: 'message' }, 'field');
+    error.setAllTouched(true);
+    expect(error.hasError('field')).toBeTruthy();
+  });
+
+  it('should return error message when allTouched false true and field is touched', () => {
+    error.setError({ field: 'message' }, 'field');
+    error.setAllTouched(false);
+    error.setTouched('field');
+
+    expect(error.hasError('field')).toBeTruthy();
+  });
+
+  it('should return error message for a different index', () => {
+    error.setError({ field: [null, 'message'] }, 'field');
+    error.setTouched('field');
+    expect(error.hasError('field', 0)).toBeFalsy();
+    expect(error.hasError('field', 1)).toBeTruthy();
+  });
 });
