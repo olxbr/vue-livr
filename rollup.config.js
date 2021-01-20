@@ -26,7 +26,9 @@ export default [
     ],
     plugins: [
       terser(),
-      commonjs(),
+      commonjs({
+        ignoreGlobal: true
+      }),
       resolve()
     ],
   }
