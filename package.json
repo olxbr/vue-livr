@@ -1,11 +1,12 @@
 {
   "name": "vue-livr",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Vue LIVR plugin",
   "author": "Jonatas Gusmão <js.gusmao@hotmail.com>",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
+  "unpkg": "dist/index.js",
   "files": [
     "dist",
     "dist/esm",

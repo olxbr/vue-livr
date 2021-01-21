@@ -9,15 +9,21 @@ export default [
     },
     output: [
       {
-        dir: 'dist',
+        exports: 'named',
+        dir: 'dist/umd',
+        format: 'umd',
+        name: 'vue-livr',
+      },
+      {
+        exports: 'named',
+        name: 'VueLIVR',
+        dir: 'dist/',
         format: 'iife',
-        name: 'VueLivr',
       },
       {
         dir: 'dist/esm',
-        format: 'esm',
-        esModule: false,
-        name: 'VueLivr',
+        format: 'es',
+        name: 'vue-livr',
       },
       {
         dir: 'dist/cjs',
@@ -29,7 +35,9 @@ export default [
       commonjs({
         ignoreGlobal: true
       }),
-      resolve()
+      resolve({
+        mainFields: ['module', 'main', 'jsnext', 'browser'],
+      })
     ],
   }
 ];
