@@ -10,7 +10,6 @@ import { setConfig, getConfig } from './config';
 let Vue;
 
 export let pluginInstance;
-
 class LivrPlugin {
   constructor(config, _Vue) {
     this.configure(config);
@@ -21,23 +20,6 @@ class LivrPlugin {
 
     this.livrInstance = setValidator(new Livr(null, this.config));
     this.initVM(this.config);
-  }
-
-  static install(_Vue, options = {}) {
-    if (Vue && _Vue === Vue) {
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.warn('already installed, Vue.use(LivrPlugin) should only be called once.');
-      }
-      return;
-    }
-
-    Vue = _Vue;
-
-    pluginInstance = new LivrPlugin(options);
-    Livr.$livr = pluginInstance;
-
-    Vue.mixin(mixin);
   }
 
   initVM({ errorBagName, fieldsBagName }) {
@@ -66,4 +48,23 @@ class LivrPlugin {
   }
 }
 
-export default LivrPlugin;
+export function install(_Vue, options = {}) {
+  if (Vue && _Vue === Vue) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.warn('already installed, Vue.use(LivrPlugin) should only be called once.');
+    }
+    return;
+  }
+
+  Vue = _Vue;
+
+  pluginInstance = new LivrPlugin(options);
+  Livr.$livr = pluginInstance;
+
+  Vue.mixin(mixin);
+}
+
+export default {
+  install,
+};
